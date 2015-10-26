@@ -1,0 +1,75 @@
+# Cache and logs (Symfony2)
+/Backend/app/cache/*
+/Backend/app/logs/*
+!Backend/app/cache/.gitkeep
+!Backend/app/logs/.gitkeep
+
+# Cache and logs (Symfony3)
+/Backend/var/cache/*
+/Backend/var/logs/*
+!Backend/var/cache/.gitkeep
+!Backend/var/logs/.gitkeep
+
+# Parameters
+/Backend/app/config/parameters.yml
+/Backend/app/config/parameters.ini
+
+# Managed by Composer
+/Backend/app/bootstrap.php.cache
+/Backend/var/bootstrap.php.cache
+/Backend/bin/*
+!Backend/bin/console
+!Backend/bin/symfony_requirements
+/Backend/vendor/
+
+# Assets and user uploads
+/Backend/web/bundles/
+/Backend/web/uploads/
+
+# PHPUnit
+/Backend/app/phpunit.xml
+/Backend/phpunit.xml
+
+# Build data
+/Backend/build/
+
+# Composer PHAR
+/Backend/composer.phar
+
+# Cache and logs (Symfony2)
+/Frontend/app/cache/*
+/Frontend/app/logs/*
+!Frontend/app/cache/.gitkeep
+!Frontend/app/logs/.gitkeep
+
+# Cache and logs (Symfony3)
+/Frontend/var/cache/*
+/Frontend/var/logs/*
+!Frontend/var/cache/.gitkeep
+!Frontend/var/logs/.gitkeep
+
+# Parameters
+/Frontend/app/config/parameters.yml
+/Frontend/app/config/parameters.ini
+
+# Managed by Composer
+/Frontend/app/bootstrap.php.cache
+/Frontend/var/bootstrap.php.cache
+/Frontend/bin/*
+!Frontend/bin/console
+!Frontend/bin/symfony_requirements
+/Frontend/vendor/
+
+# Assets and user uploads
+/Frontend/web/bundles/
+/Frontend/web/uploads/
+
+# PHPUnit
+/Frontend/app/phpunit.xml
+/Frontend/phpunit.xml
+
+# Build data
+/Frontend/build/
+
+# Composer PHAR
+/Frontend/composer.phar
