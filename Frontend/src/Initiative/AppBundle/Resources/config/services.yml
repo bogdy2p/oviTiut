@@ -1,0 +1,13 @@
+parameters:
+#    initiative_app.example.class: Initiative\AppBundle\Example
+
+services:
+#    initiative_app.example:
+#        class: %initiative_app.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]
+
+services:
+    initiative_app.example.client:
+        class: %guzzle.client.class%
+        tag: guzzle.client
+        arguments: ["http://api.example.com/"]

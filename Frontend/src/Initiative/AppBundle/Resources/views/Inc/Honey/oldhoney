@@ -1,0 +1,248 @@
+
+<!-- 
+
+      <?php
+
+
+		// see if auth code exists, and get a new access token
+		if(isset($_GET['code'])) {
+			$code = $_GET['code'];
+			// get info from honey
+			$headers = array("Accept" => "application/x-www-form-urlencoded");
+      $body =   utf8_encode("grant_type=authorization_code&client_id=".$client_id."&client_secret=".$client_secret."&authorization_code=".$code);
+      $response = Unirest\Request::post("https://honey.is/oauth/token", $headers, $body)->body;
+
+      var_dump($response);
+
+
+
+      if($response->error == "invalid_grant") {
+
+              $my_refresh_token = "79369a57bd380fe418430ec9cc318f";
+              $headers = array("Accept" => "application/x-www-form-urlencoded");
+              $body =   utf8_encode("grant_type=refresh_token&client_id=".$client_id."&client_secret=".$client_secret."&authorization_code=".$code."&refresh_token=".$my_refresh_token);
+              $response = Unirest\Request::post("https://honey.is/oauth/token", $headers, $body)->body;
+
+              $user_id = $response->body->user_id;
+              $access_token = $response->body->access_token;
+              var_dump($response);
+
+              $headers = array(
+                  'Content-Type: application/json',
+                  'Authorization: Bearer '.$access_token
+              );
+
+              $url = "https://api.honey.is/1.0/account";
+
+              $ch = curl_init();
+              curl_setopt($ch, CURLOPT_URL, $url);
+              curl_setopt($ch, CURLOPT_POST, false);
+              curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+              curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
+              curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+              $result = curl_exec($ch);
+              curl_close($ch);
+
+              $result_arr = json_decode($result, true);
+              
+              // $uuid = $result_arr['user']['uuid']; // unnecessary?
+              // $name = $result_arr['user']['name_or_username']; //unnecessary?
+              $username =  $result_arr['user']['username'];
+              $avatar_uuid = $result_arr['user']['avatar_uuid'];
+              $title = $result_arr['user']['job_title'];
+              $office = $result_arr['user']['location'];
+
+              echo "<div class=\"hidden honey-data-container\" data-honey-id=\"".$user_id."\" data-access-token=\"".$access_token."\" data-office=\"".$office."\"  data-title=\"".$title."\"  data-avatar=\"".$avatar_uuid."\"></div>";
+
+              // set url for avatar
+              $comment_avatar2 = substr($avatar_uuid, 0, 3);
+              $comment_avatar3 = substr($avatar_uuid, -3);
+              $comment_avatar4 = substr($avatar_uuid, 3, -3);
+              $honey_avatar_url = "https://cdn.honey.is/avatar/".$comment_avatar2."/".$comment_avatar3."/".$comment_avatar4."_100x100.png";
+              echo "<script>$('.avatar_img').css('background-image', 'url(\"".$honey_avatar_url."\")');</script>";
+
+              // set info on our backend
+              $honeydata_url = $this->container->getParameter('apiUrl')."users/".$_COOKIE['dash_user_id']."/honeydata";
+
+              $honeydata_body = array(
+                'profile_picture' => $avatar_uuid,
+                'title' => $title,
+                'office' => $office,
+                'honey_user_uuid' => $access_token,
+                'honey_user_id'=> $user_id
+                );
+
+              Unirest\Request::put($honeydata_url, $api_header, $honeydata_body);
+
+      }
+
+      if($response->error != "invalid_grant") {
+        $user_id = $response->body->user_id;
+        $access_token = $response->body->access_token;
+
+
+        // update user info
+        // *********************************
+        $headers = array(
+            'Content-Type: application/json',
+            'Authorization: Bearer '.$access_token
+        );
+
+        $url = "https://api.honey.is/1.0/account";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, false);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        $result = curl_exec($ch);
+        curl_close($ch);
+
+        $result_arr = json_decode($result, true);
+        
+        // $uuid = $result_arr['user']['uuid']; // unnecessary?
+        // $name = $result_arr['user']['name_or_username']; //unnecessary?
+        $username =  $result_arr['user']['username'];
+        $avatar_uuid = $result_arr['user']['avatar_uuid'];
+        $title = $result_arr['user']['job_title'];
+        $office = $result_arr['user']['location'];
+
+        echo "<div class=\"hidden honey-data-container\" data-honey-id=\"".$user_id."\" data-access-token=\"".$access_token."\" data-office=\"".$office."\"  data-title=\"".$title."\"  data-avatar=\"".$avatar_uuid."\"></div>";
+
+        // set url for avatar
+        $comment_avatar2 = substr($avatar_uuid, 0, 3);
+        $comment_avatar3 = substr($avatar_uuid, -3);
+        $comment_avatar4 = substr($avatar_uuid, 3, -3);
+        $honey_avatar_url = "https://cdn.honey.is/avatar/".$comment_avatar2."/".$comment_avatar3."/".$comment_avatar4."_100x100.png";
+        echo "<script>$('.avatar_img').css('background-image', 'url(\"".$honey_avatar_url."\")');</script>";
+
+        // set info on our backend
+        $honeydata_url = $this->container->getParameter('apiUrl')."users/".$_COOKIE['dash_user_id']."/honeydata";
+
+        $honeydata_body = array(
+        	'profile_picture' => $avatar_uuid,
+        	'title'	=> $title,
+        	'office' => $office,
+  				'honey_user_uuid' => $access_token,
+  				'honey_user_id'=> $user_id
+        	);
+
+        Unirest\Request::put($honeydata_url, $api_header, $honeydata_body);
+
+      } else {
+        echo "<script> alert(\"Your Honey account may be associated with another dash account. We can not authorize this account at the moment.\");</script>";
+      }
+
+		}
+
+		// auth works
+		if($access_token) {
+			$headers = array(
+        'Content-Type: application/json',
+        'Authorization: Bearer '.$access_token
+	    );
+	    $url = "https://api.honey.is/group/37060/posts";
+	    $ch = curl_init();
+
+	    curl_setopt($ch, CURLOPT_URL, $url);
+	    curl_setopt($ch, CURLOPT_POST, false);
+	    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
+	    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+	    $result = curl_exec($ch);
+	    curl_close($ch);
+
+	    $honey = json_decode($result, true);
+
+      var_dump($honey);
+
+      if($honey['error_description'] == "Invalid access token") {
+        echo "issue";
+
+
+              $code = $_GET['code'];
+              // get info from honey
+              $headers = array("Accept" => "application/x-www-form-urlencoded");
+              $body =   utf8_encode("grant_type=authorization_code&client_id=".$client_id."&client_secret=".$client_secret."&authorization_code=".$code);
+              $response = Unirest\Request::post("https://honey.is/oauth/token", $headers, $body)->body;
+
+              var_dump($response);
+
+              if($response->error == "invalid_grant") {
+
+                      $my_refresh_token = "79369a57bd380fe418430ec9cc318f";
+                      $headers = array("Accept" => "application/x-www-form-urlencoded");
+                      $body =   utf8_encode("grant_type=refresh_token&client_id=".$client_id."&client_secret=".$client_secret."&authorization_code=".$code."&refresh_token=".$my_refresh_token);
+                      $response = Unirest\Request::post("https://honey.is/oauth/token", $headers, $body)->body;
+
+                      $user_id = $response->body->user_id;
+                      $access_token = $response->body->access_token;
+               }
+               echo $access_token;
+
+
+
+
+      }
+
+	    // verify everything worked
+	    if(isset($honey['posts'])) {
+	    	foreach ($honey['posts'] as $post) {
+	    		$comment_avatar = $post['author']['avatar_uuid'];
+
+      		if($comment_avatar) {
+            $comment_avatar2 = substr($comment_avatar, 0, 3);
+            $comment_avatar3 = substr($comment_avatar, -3);
+            $comment_avatar4 = substr($comment_avatar, 3, -3);
+            $photo_url = "https://cdn.honey.is/avatar/".$comment_avatar2."/".$comment_avatar3."/".$comment_avatar4."_100x100.png";
+            echo "<div class=\"honey_item\">";
+            echo "<div class=\"honey_photo\" style=\"background-image: url('$photo_url')\"></div>";
+          } else {
+            echo "<div class=\"honey_photo\" style=\"background-image: url('img/no-face.png')\"></div>";
+          }
+      
+			    echo "<div class=\"honey_title\"><p>
+			    <a href=\"https://honey.is/home/#post/".$post['id']."\ target=\"_blank\">";
+			    echo $post['title'];
+			    echo "</a></p>
+			    <div class=\"meta\"><p><span class=\"author\">";
+			    echo $post['author']['name'];
+			    echo "</span> ";
+      		// echo "to ";
+      		// echo $honey['posts'][$i]['topic_name'];
+      		$creation_date = $post['created_at'];
+      		// calculate the time from now to the post
+      		$now = time(); 
+        	$unix_time = strtotime($creation_date);
+        	$datediff = $now - $unix_time;
+        	$days_ago = floor($datediff/(60*60*24)).' days ago';
+        	echo $days_ago;
+
+      		echo "</p></div>";
+      		// end honey meta
+      		echo "</div>";
+      		// end honey title
+      		echo "</div>";
+      		// end honey item
+	    	}
+	    } //if(isset($honey['posts']))
+
+		} elseif(!$access_token || !isset($honey['posts'])) {
+?>
+			<div class="authorize_honey evo-text-center">
+        <img src="<?php echo $view['assets']->getUrl('img/honey_logo.png') ?>" width="30">
+        <h1 class="evo-header-small evo-text-center">Get connected with Honey.</h1>
+        <p class="evo-text-smaller evo-text-center">Complete your dash profile by authorizing honey</p>
+        <div class="evo-space evo-text-center"></div>
+        <a href="https://honey.is/oauth/authorize?response_type=code&client_id=<?php echo $client_id; ?>" class="evo-btn evo-btn-2" style="padding: 8px 15px;">
+          Authorize
+        </a>
+      </div>
+      <?php
+		}
+  ?>
+</div> -->

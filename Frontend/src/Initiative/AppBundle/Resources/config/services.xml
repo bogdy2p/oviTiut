@@ -1,0 +1,4 @@
+<service id="example.client" class="%guzzle.client.class%">
+    <tag name="guzzle.client"/>
+    <argument>http://api.example.com/</argument>
+</service>

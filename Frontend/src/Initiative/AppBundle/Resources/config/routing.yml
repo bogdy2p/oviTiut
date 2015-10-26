@@ -1,0 +1,68 @@
+initiative_app_index:
+    path:     /
+    defaults: { _controller: InitiativeAppBundle:Dash:index }
+
+initiative_app_home:
+    path:     /home
+    defaults: { _controller: InitiativeAppBundle:Dash:index }
+
+initiative_app_login:
+    path:     /login
+    defaults: { _controller: InitiativeAppBundle:Login:index }
+
+initiative_app_homepage:
+    path:     /dash
+    defaults: { _controller: InitiativeAppBundle:Dash:index }
+
+initiative_app_allProjects:
+    path:     /all_projects
+    defaults: { _controller: InitiativeAppBundle:AllProjects:index }
+
+initiative_app_myTasks:
+    path:     /my_tasks
+    defaults: { _controller: InitiativeAppBundle:MyTasks:index }
+
+initiative_app_projectRollup:
+    path:     /project_rollup
+    defaults: { _controller: InitiativeAppBundle:ProjectRollup:index }
+
+initiative_app_allFiles:
+    path:     /all_files
+    defaults: { _controller: InitiativeAppBundle:AllFiles:index }
+
+initiative_app_admin:
+    path:     /admin
+    defaults: { _controller: InitiativeAppBundle:Admin:index }
+
+initiative_app_newProject:
+    path:     /new_campaign
+    defaults: { _controller: InitiativeAppBundle:NewCampaign:index }
+
+initiative_app_editProject:
+    path:     /edit_campaign/{project_id}
+    defaults: { _controller: InitiativeAppBundle:EditCampaign:index }
+
+initiative_app_memberManagement:
+    path:     /manage_members/{project_id}
+    defaults: { _controller: InitiativeAppBundle:MemberManagement:index }
+
+
+initiative_app_project:
+    path:     /campaign/{project_id}/{step_id}
+    defaults: { _controller: InitiativeAppBundle:Campaign:index }
+
+initiative_app_files:
+    path:     /files/{project_id}
+    defaults: { _controller: InitiativeAppBundle:Files:index }
+
+initiative_app_download_ppt:
+    path:     /downloadPPT
+    defaults: { _controller: InitiativeAppBundle:DownloadPPT:index }
+
+initiative_app_download_file:
+    path:     /downloadFile
+    defaults: { _controller: InitiativeAppBundle:DownloadFile:index }
+
+initiative_app_goldenRules:
+    path:     /golden_rules
+    defaults: { _controller: InitiativeAppBundle:GoldenRules:index }
