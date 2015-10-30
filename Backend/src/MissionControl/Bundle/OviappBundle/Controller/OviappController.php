@@ -55,7 +55,7 @@ class OviappController extends FOSRestController
      * @return array
      * @View()
      */
-    public function getProduseAction(Request $request)
+    public function getProductsAction(Request $request)
     {
 
         $user = $this->getUser();
@@ -80,13 +80,63 @@ class OviappController extends FOSRestController
 
 //        print_r($output_array);
 //        die();
-
         //Instantiate response
         $response = new Response();
 
         $response->setStatusCode(200);
         $response->setContent(json_encode(array(
-                //'Role(DEBUG ONLy)' => $user->getRoles(),
+            //'Role(DEBUG ONLy)' => $user->getRoles(),
+            'Produse' => $output_array,
+                )
+        ));
+
+        return $response;
+    }
+
+    /**
+     * @ApiDoc(
+     *    description = "Fetches One Produs Momentarely",
+     *    section="AAA",
+     *    statusCodes = {
+     *     200 = "Returned when the request is without errors",
+     *     403 = "Invalid API KEY",
+     *     500 = "Header x-wsse does not exist"
+     *    },
+     *    requirements = {
+     *       {"name" = "_format","requirement" = "json|xml"}
+     *    },
+     *
+     * )
+     * @return array
+     * @View()
+     */
+    public function getProductAction($product_id)
+    {
+
+        $user     = $this->getUser();
+        //Instantiate response
+        $response = new Response();
+
+
+        $produs = $this->getDoctrine()->getRepository('OviappBundle:Produs')->findOneById($product_id);
+
+        $output_array = array();
+
+        if ($produs) {
+            $id = $produs->getId();
+
+            $output_array[$id]['nume']           = $produs->getNume();
+            $output_array[$id]['pret']           = $produs->getPretLivrare();
+            $output_array[$id]['cantitate']      = $produs->getCantitate();
+            $output_array[$id]['unitate_masura'] = $produs->getUnitateMasura();
+        } else {
+            $response->setStatusCode(404);
+            return $response;
+        }
+
+        $response->setStatusCode(200);
+        $response->setContent(json_encode(array(
+            //'Role(DEBUG ONLy)' => $user->getRoles(),
             'Produse' => $output_array,
                 )
         ));
