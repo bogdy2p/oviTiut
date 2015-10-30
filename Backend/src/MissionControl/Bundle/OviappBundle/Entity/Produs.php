@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Produs
  *
- * @ORM\Table(name = "oviapp_produs")
+ * @ORM\Table(name = "oviapp_product")
  * @ORM\Entity(repositoryClass="MissionControl\Bundle\OviappBundle\Entity\ProdusRepository")
  */
 class Produs

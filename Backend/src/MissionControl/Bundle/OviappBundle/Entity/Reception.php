@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Reception
  *
- * @ORM\Table()
+ * @ORM\Table(name = "oviapp_reception")
  * @ORM\Entity
  */
 class Reception

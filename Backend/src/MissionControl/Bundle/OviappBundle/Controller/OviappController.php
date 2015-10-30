@@ -27,6 +27,7 @@ use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\File\File;
 use JMS\Serializer\SerializationContext;
 use MissionControl\Bundle\OviappBundle\Entity\Produs;
+use MissionControl\Bundle\OviappBundle\Entity\Reception;
 
 class OviappController extends FOSRestController
 {
@@ -34,7 +35,7 @@ class OviappController extends FOSRestController
     /**
      * @ApiDoc(
      *    description = "Fetches all produse momentarely",
-     *    section="AAA",
+     *    section="A_Products",
      *    statusCodes = {
      *     200 = "Returned when the request is without errors",
      *     400 = "This call is only for administrators.",
@@ -96,7 +97,7 @@ class OviappController extends FOSRestController
     /**
      * @ApiDoc(
      *    description = "Fetches One Produs Momentarely",
-     *    section="AAA",
+     *    section="A_Products",
      *    statusCodes = {
      *     200 = "Returned when the request is without errors",
      *     403 = "Invalid API KEY",
@@ -146,8 +147,8 @@ class OviappController extends FOSRestController
 
     /**
      * @ApiDoc(
-     *    description = "FetZZZZZZZZchesr this API call.",
-     *    section="AAA",
+     *    description = "Get all receptions unfiltered.",
+     *    section="B_Receptii",
      *    statusCodes = {
      *     200 = "Returned when the request is without errors",
      *     400 = "This call is only for administrators.",
@@ -159,7 +160,7 @@ class OviappController extends FOSRestController
      *    },
      *  parameters={
      *       {"name"="filter",  "dataType"="integer","required"=false,"description"="Default filter is 0
-     *       ( 0 = All Visible Related Campaigns, 1 = Where User Should Work On, 2 = Campaignstatus (Build,Approved) , 3 = Campaignstatus(Completed,Cancelled) , 4 = Disabled Campaigns (ADMIN Only) "},
+     *       ( , 3 = Campaignstatus(Completed,Cancelled) , 4 = Disabled Campaigns (ADMIN Only) "},
      *
      *
      * }
@@ -168,10 +169,83 @@ class OviappController extends FOSRestController
      * @return array
      * @View()
      */
-    public function getTestareAction(Request $request)
+    public function getReceptionsAction(Request $request)
+    {
+        $user         = $this->getUser();
+        $receptions   = $this->getDoctrine()->getRepository('OviappBundle:Reception')->findAll();
+        $output_array = array();
+
+        foreach ($receptions as $reception) {
+
+            $id = $reception->getId();
+
+            $output_array[$id]['id']          = $reception->getId();
+            $output_array[$id]['client']      = $reception->getClient();
+            $output_array[$id]['creata_de']   = $reception->getCreator();
+            $output_array[$id]['data_creare'] = $reception->getDateCreated();
+            $output_array[$id]['produse']     = $reception->getProducts();
+        }
+
+        //Instantiate response
+        $response = new Response();
+
+        $response->setStatusCode(200);
+        $response->setContent(json_encode(array(
+            'Receptii' => $output_array,
+                )
+        ));
+        return $response;
+    }
+
+    /**
+     * @ApiDoc(
+     *    description = "Get One Reception by ID",
+     *    section="B_Receptii",
+     *    statusCodes = {
+     *     200 = "Returned when the request is without errors",
+     *     403 = "Invalid API KEY",
+     *     500 = "Header x-wsse does not exist"
+     *    },
+     *    requirements = {
+     *       {"name" = "_format","requirement" = "json|xml"}
+     *    },
+     *
+     * )
+     * @return array
+     * @View()
+     */
+    public function getReceptionAction($reception_id)
     {
 
+        $user     = $this->getUser();
+        //Instantiate response
+        $response = new Response();
 
-        return "vasile";
+
+        $reception = $this->getDoctrine()->getRepository('OviappBundle:Reception')->findOneById($reception_id);
+
+        $output_array = array();
+
+        if ($reception) {
+            $id = $reception->getId();
+
+            $output_array[$id]['id']          = $reception->getId();
+            $output_array[$id]['client']      = $reception->getClient();
+            $output_array[$id]['creata_de']   = $reception->getCreator();
+            $output_array[$id]['data_creare'] = $reception->getDateCreated();
+            $output_array[$id]['produse']     = $reception->getProducts();
+        } else {
+            $response->setStatusCode(404);
+            return $response;
+        }
+
+        $response->setStatusCode(200);
+        $response->setContent(json_encode(array(
+            //'Role(DEBUG ONLy)' => $user->getRoles(),
+            'Receptie' => $output_array,
+                )
+        ));
+
+        return $response;
     }
 }
