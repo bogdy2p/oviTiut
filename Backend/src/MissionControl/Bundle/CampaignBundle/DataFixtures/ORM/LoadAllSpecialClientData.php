@@ -18,25 +18,25 @@ class LoadAllSpecialClientData extends AbstractFixture implements OrderedFixture
      * {@inheritDoc}
      */
     public function load(ObjectManager $manager) {
-        $creationDate = new \DateTime();
-        $creationDate->setTimezone(self::timezoneUTC());
-
-        $allclient = new Client();
-        $allclient->setName('all_clients');
-        $allclient->setDbid(0);
-        $allclient->setCreatedAt($creationDate);
-        $allclient->setUpdatedAt($creationDate);
-        $manager->persist($allclient);
-
-        $temp_client = new Client();
-        $temp_client->setName('temp_client');
-        $temp_client->setDbid(0);
-        $temp_client->setCreatedAt($creationDate);
-        $temp_client->setUpdatedAt($creationDate);
-        
-        $manager->persist($temp_client);
-        $manager->flush();
-        echo 'The special case (all_clients and temp_client) inserted into the database.';
+//        $creationDate = new \DateTime();
+//        $creationDate->setTimezone(self::timezoneUTC());
+//
+//        $allclient = new Client();
+//        $allclient->setName('all_clients');
+//        $allclient->setDbid(0);
+//        $allclient->setCreatedAt($creationDate);
+//        $allclient->setUpdatedAt($creationDate);
+//        $manager->persist($allclient);
+//
+//        $temp_client = new Client();
+//        $temp_client->setName('temp_client');
+//        $temp_client->setDbid(0);
+//        $temp_client->setCreatedAt($creationDate);
+//        $temp_client->setUpdatedAt($creationDate);
+//
+//        $manager->persist($temp_client);
+//        $manager->flush();
+//        echo 'The special case (all_clients and temp_client) inserted into the database.';
     }
 
     /**

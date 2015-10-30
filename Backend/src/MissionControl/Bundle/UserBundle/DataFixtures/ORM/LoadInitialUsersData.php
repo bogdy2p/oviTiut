@@ -26,23 +26,8 @@ class LoadInitialUsersData extends AbstractFixture implements OrderedFixtureInte
         $creationDate->setTimezone(self::timezoneUTC());
 
         $arrays_of_user_data = array(
-            array('bleece', 'password', 'Bret', 'Leece', 'Bret.Leece@Initiative.com', 'ROLE_ADMINISTRATOR', '8f81fa58-a901-45a5-b444-c11dac04e384'),
-            array('jgladysz', 'password', 'John', 'Gladysz', 'John.Gladysz@Initiative.com', 'ROLE_ADMINISTRATOR', 'cd78185e-6cbf-4da6-82ee-7a737df7afb7'),
-            array('smoseley', 'password', 'Sue', 'Moseley', 'Sue.Moseley@Initiative.com', 'ROLE_ADMINISTRATOR', '805d323c-7f91-4b62-a7e2-94acb2b054f5'),
-            array('nsantos', 'password', 'Nathalie', 'Santos', 'Nathalie.Santos@Initiative.com', 'ROLE_CONTRIBUTOR', '4ededec2-5c43-4735-a106-9edf3e0c9431'),
-            array('sivey', 'password', 'Sarah', 'Ivey', 'Sarah.Ivey@Initiative.com', 'ROLE_ADMINISTRATOR', '482f35f3-2faa-488c-b11b-9db8e4e0eb2e'),
-            array('lmeranus', 'password', 'Leah', 'Meranus', 'Leah.Meranus@Initiative.com', 'ROLE_CONTRIBUTOR', 'ade80d1f-8581-47fe-8ce4-3546ba4788ea'),
-            array('sebrahim', 'password', 'Samira', 'Ebrahim', 'Samira.Ebrahim@Initiative.com', 'ROLE_ADMINISTRATOR', '09f0ae7c-0ce8-4f5d-86f6-4b4941134df6'),
-            array('jelms', 'password', 'Jim', 'Elms', 'Jim.Elms@Initiative.com', 'ROLE_ADMINISTRATOR', '6123986c-dd7a-4496-819a-17cd1af38e3d'),
-            array('jmerchan', 'password', 'Jaime', 'Merchan', 'Jaime.Merchan@Initiative.com', 'ROLE_ADMINISTRATOR', '512c13a4-c255-4787-b370-8ae63c87c8cc'),
-            array('gvillasboas', 'password', 'Goncalo', 'Boas', 'Goncalo.Boas@Initiative.com', 'ROLE_ADMINISTRATOR', 'bf4bff30-4664-48f9-87d5-fb78520df136'),
-            array('vsoldano', 'password', 'Veronica', 'Soldano', 'Veronica.Soldano@Initiative.com', 'ROLE_CONTRIBUTOR', 'dbc89dcf-4cbe-4b25-b80a-1f7499e993aa'),
-            array('srivalsbodin', 'password', 'Sophie', 'Bodin', 'Sophie.Bodin@Initiative.com', 'ROLE_ADMINISTRATOR', 'ac414394-b595-4129-be18-616e67221e84'),
-            array('ecabral', 'password', 'Erika', 'Cabral', 'Erika.Cabral@Initiative.com', 'ROLE_CONTRIBUTOR', 'ecf1a749-883e-4f2d-aeeb-fe3d50aa69cb'),
-            array('acardoso', 'password', 'Ana', 'Cardoso', 'Ana.Cardoso@Initiative.com', 'ROLE_CONTRIBUTOR', 'c7f27c68-9fa5-46dd-ae89-75bde9ffedf1'),
-            array('bosdoit', 'password', 'Bertrand', 'Osdoit', 'Bertrand.Osdoit@Initiative.com', 'ROLE_ADMINISTRATOR', 'a7f27c68-b599-47e6-bd48-e08e45c9e58a'),
-            array('bertrand', 'Test1234', 'Bertrands Matrix User', 'Do not Edit', 'b@b.com', 'ROLE_ADMINISTRATOR', 'e2a0ff6a-ec64-47e6-bd48-e08e45c9e58a'),
-            array('qa_user', 'password', 'Quality', 'Assurance User', 'a@a.com', 'ROLE_ADMINISTRATOR', '8f45fa58-4664-b11b-82ee-7a737df7afb7')
+            array('qa_user', 'password', 'Quality', 'Assurance User', 'a@a.com', 'ROLE_ADMINISTRATOR', '8f45fa58-4664-b11b-82ee-7a737df7afb7'),
+            array('admin', 'admin123', 'Admin', 'Admin123', 'bogdy2p@gmail.com', 'ROLE_ADMINISTRATOR', '12345678-4664-b11b-82ee-7a737df7afb7')
         );
         $count = 0;
         foreach ($arrays_of_user_data as $array_of_user_data) {
@@ -93,18 +78,18 @@ class LoadInitialUsersData extends AbstractFixture implements OrderedFixtureInte
         $manager->flush();
 
         //Set all the default users to have the "created by" set as John Gladysz's Username.
-        $john = $manager->getRepository('UserBundle:User')->findOneByUsername('jgladysz');
-        if ($john) {
-            foreach ($arrays_of_user_data as $userdata) {
-
-                $user = $manager->getRepository('UserBundle:User')->findOneByUsername($userdata[0]);
-                if ($user) {
-                    $user->setCreatedBy($john);
-                    $manager->persist($user);
-                    $manager->flush();
-                }
-            }
-        }
+//        $john = $manager->getRepository('UserBundle:User')->findOneByUsername('jgladysz');
+//        if ($john) {
+//            foreach ($arrays_of_user_data as $userdata) {
+//
+//                $user = $manager->getRepository('UserBundle:User')->findOneByUsername($userdata[0]);
+//                if ($user) {
+//                    $user->setCreatedBy($john);
+//                    $manager->persist($user);
+//                    $manager->flush();
+//                }
+//            }
+//        }
     }
 
     /**

@@ -84,163 +84,163 @@ class LoadAxeDefaultCampaignData extends AbstractFixture implements OrderedFixtu
      * {@inheritDoc}
      */
     public function load(ObjectManager $manager) {
-        $creationDate = new \DateTime();
-        $creationDate->setTimezone(self::timezoneUTC());
-
-        $creator_email = 'Bret.Leece@Initiative.com';
-        $creator_user = $manager->getRepository('UserBundle:User')->findOneByEmail($creator_email);
-
-        //FIELDS NECCESARY :
-        //'id','name', 'product','country','status','presented','completion_date','deliverable_date',token, 
-
-        $axe_campaign_data = array(
-            //id
-            'f29a70c2-2ea1-4dbc-bbf8-c4787e48092f',
-            //name
-            'AXE OCTO III W2',
-            //product (this will fetch the other related)
-            100,
-            //country
-            'Colombia', // can fetch the region
-            //campaign_status
-            '1', //build
-            //presented_to_client
-            true, // true
-            // CompletionDate
-            '2015-05-05',
-            // DeliverableDate
-            '2015-05-05',
-            //TOKEN KEY (another uUID)
-            'b5c152e0-3cab-4c60-abfd-53070b73717c',
-        );
-
-        $product_id = $axe_campaign_data[2];
-        //Reverse fetch this by the unique product id of this campaign.
-        $product = $manager->getRepository('CampaignBundle:Product')->findOneBy(['name' => 'Deodorants']);
-        $country = $manager->getRepository('CampaignBundle:Country')->findOneByName($axe_campaign_data[3]);
-        $status = $manager->getRepository('CampaignBundle:Campaignstatus')->find($axe_campaign_data[4]);
-
-
-        $productline = $product->getProductline();
-        $brand = $productline->getBrand();
-        $division = $brand->getDivision();
-        $client = $division->getClient();
-
-        $completion_date = new \DateTime($axe_campaign_data[6]);
-        $completion_date->setTimezone(self::timezoneUTC());
-        $deliverable_date = new \DateTime($axe_campaign_data[7]);
-        $deliverable_date->setTimezone(self::timezoneUTC());
-
-
-        $campaign = new Campaign();
-
-        $campaign->setUser($creator_user);
-        $campaign->setId($axe_campaign_data[0]);
-        $campaign->setName($axe_campaign_data[1]);
-        $campaign->setClient($client);
-        $campaign->setDivision($division);
-        $campaign->setBrand($brand);
-        $campaign->setProductline($productline);
-        $campaign->setProduct($product);
-        $campaign->setCountry($country);
-        $campaign->setCampaignstatus($status);
-        $campaign->setNotVisible(false);
-        $campaign->setScreentype('10000');
-        $campaign->setCompleteness(0);
-        $campaign->setCompletionDate($completion_date);
-        $campaign->setClientDeliverabledate($deliverable_date);
-        $campaign->setClientPresentation($axe_campaign_data[5]);
-        $campaign->setToken($axe_campaign_data[8]);
-        $campaign->setCreatedAt($creationDate);
-        $campaign->setUpdatedAt($creationDate);
-
-
-
-      
-        $manager->persist($campaign);
-
-        $add_as_teammember = new Teammember();
-        $add_as_teammember->setCampaign($campaign);
-        $add_as_teammember->setMember($creator_user);
-        $add_as_teammember->setIsReviewer(false);
-        $manager->persist($add_as_teammember);
-
-
-
-
-
-        //GENERATE THE TASKS FOR THIS CAMPAIGN.....
-
-        $task_types = $manager->getRepository('TaskBundle:Taskname')->findAll();
-        $default_task_status = $manager->getRepository('TaskBundle:Taskstatus')->find(1);
-
-        foreach ($task_types as $tasktype) {
-
-            $new_task = new Task();
-            $new_task->setCampaign($campaign);
-            $new_task->setTaskname($tasktype);
-            $new_task->setOwner($creator_user);
-            $new_task->setTaskmessage(NULL);
-            $new_task->setMatrixfileversion(0);
-            $new_task->setTaskstatus($default_task_status);
-            $new_task->setPhase($tasktype->getPhaseid());
-            $new_task->setCreatedAt($creationDate);
-            $new_task->setCreatedby($creator_user);
-            $new_task->setUpdatedAt($creationDate);
-            $manager->persist($new_task);
-        }
-        $manager->flush();
-
-        ///////////////////////////////////////////////////////////
-        //ADD THE FILE 1
-        ///////////////////////////////////////////////////////////
-        $project_file_datas = self::getProjectFileData();
-
-        //THIS IS A LITTLE MORE COMPLICATED THAN WE FIRST THOUGHT.
-        
-        //WE MUST CHECK THE USER'S NAME , AND SET THE FILE-> USER TO THE SPECIFIED NAME....
-        
-
-        foreach ($project_file_datas as $project_file_data) {
-
-            //GRAB THE USER THAT CREATED THIS FILE IF EXISTS    
-            $user_that_created_this_file = $manager->getRepository('UserBundle:User')->findOneByUsername('bosdoit');
-            $taskname = $manager->getRepository('TaskBundle:Taskname')->find(8);
-            $the_task = $manager->getRepository('TaskBundle:Task')->findOneBy([
-                'campaign'=> $campaign,
-                'taskname' => $taskname   
-                    ]);
-            $filetype = $manager->getRepository('CampaignBundle:Filetype')->findOneById($project_file_data['file_type_id']);
-            
-            $file = new File();
-            $file->setUuid($project_file_data['uuid']);
-            $file->setFileName($project_file_data['file_name']);
-            $file->setOriginalName($project_file_data['original_name']);
-            $file->setContentType($project_file_data['content_type']);
-            $file->setFileLength($project_file_data['file_length']);
-            $file->setCreatedAt($creationDate);
-            $file->setUpdatedAt($creationDate);
-            $file->setCampaign($campaign);
-            $file->setUser($project_file_data['user_creator_id'] ? $user_that_created_this_file : null);
-            $file->setTask($project_file_data['task_id'] ? $the_task : null);
-            $file->setFileType($project_file_data['file_type_id'] ? $filetype : null);
-            $file->setVersion($project_file_data['version']);
-            $file->setNotVisible(false);
-            $file->setPath($project_file_data['path']);
-
-            $manager->persist($file);
-        }
-
-            $jsondatastring = Self::defaultJsonData();
-            $actual_parsing = self::parseTheLightdataString($jsondatastring,$campaign->getId(),$manager);
-            $campaign->setLightdata($actual_parsing);
-            $campaign->setMatrixfileUuid('e99fa036-c98f-481a-b83f-8e146abe64f4');
-            $campaign->setMatrixfileVersion(1);
-        $manager->flush();
-
-
-
-        echo 'Axe campaign created. Tasks Created Too. Added user as teammember & set as taskowner. Added the 18 files too.';
+//        $creationDate = new \DateTime();
+//        $creationDate->setTimezone(self::timezoneUTC());
+//
+//        $creator_email = 'Bret.Leece@Initiative.com';
+//        $creator_user = $manager->getRepository('UserBundle:User')->findOneByEmail($creator_email);
+//
+//        //FIELDS NECCESARY :
+//        //'id','name', 'product','country','status','presented','completion_date','deliverable_date',token,
+//
+//        $axe_campaign_data = array(
+//            //id
+//            'f29a70c2-2ea1-4dbc-bbf8-c4787e48092f',
+//            //name
+//            'AXE OCTO III W2',
+//            //product (this will fetch the other related)
+//            100,
+//            //country
+//            'Colombia', // can fetch the region
+//            //campaign_status
+//            '1', //build
+//            //presented_to_client
+//            true, // true
+//            // CompletionDate
+//            '2015-05-05',
+//            // DeliverableDate
+//            '2015-05-05',
+//            //TOKEN KEY (another uUID)
+//            'b5c152e0-3cab-4c60-abfd-53070b73717c',
+//        );
+//
+//        $product_id = $axe_campaign_data[2];
+//        //Reverse fetch this by the unique product id of this campaign.
+//        $product = $manager->getRepository('CampaignBundle:Product')->findOneBy(['name' => 'Deodorants']);
+//        $country = $manager->getRepository('CampaignBundle:Country')->findOneByName($axe_campaign_data[3]);
+//        $status = $manager->getRepository('CampaignBundle:Campaignstatus')->find($axe_campaign_data[4]);
+//
+//
+//        $productline = $product->getProductline();
+//        $brand = $productline->getBrand();
+//        $division = $brand->getDivision();
+//        $client = $division->getClient();
+//
+//        $completion_date = new \DateTime($axe_campaign_data[6]);
+//        $completion_date->setTimezone(self::timezoneUTC());
+//        $deliverable_date = new \DateTime($axe_campaign_data[7]);
+//        $deliverable_date->setTimezone(self::timezoneUTC());
+//
+//
+//        $campaign = new Campaign();
+//
+//        $campaign->setUser($creator_user);
+//        $campaign->setId($axe_campaign_data[0]);
+//        $campaign->setName($axe_campaign_data[1]);
+//        $campaign->setClient($client);
+//        $campaign->setDivision($division);
+//        $campaign->setBrand($brand);
+//        $campaign->setProductline($productline);
+//        $campaign->setProduct($product);
+//        $campaign->setCountry($country);
+//        $campaign->setCampaignstatus($status);
+//        $campaign->setNotVisible(false);
+//        $campaign->setScreentype('10000');
+//        $campaign->setCompleteness(0);
+//        $campaign->setCompletionDate($completion_date);
+//        $campaign->setClientDeliverabledate($deliverable_date);
+//        $campaign->setClientPresentation($axe_campaign_data[5]);
+//        $campaign->setToken($axe_campaign_data[8]);
+//        $campaign->setCreatedAt($creationDate);
+//        $campaign->setUpdatedAt($creationDate);
+//
+//
+//
+//
+//        $manager->persist($campaign);
+//
+//        $add_as_teammember = new Teammember();
+//        $add_as_teammember->setCampaign($campaign);
+//        $add_as_teammember->setMember($creator_user);
+//        $add_as_teammember->setIsReviewer(false);
+//        $manager->persist($add_as_teammember);
+//
+//
+//
+//
+//
+//        //GENERATE THE TASKS FOR THIS CAMPAIGN.....
+//
+//        $task_types = $manager->getRepository('TaskBundle:Taskname')->findAll();
+//        $default_task_status = $manager->getRepository('TaskBundle:Taskstatus')->find(1);
+//
+//        foreach ($task_types as $tasktype) {
+//
+//            $new_task = new Task();
+//            $new_task->setCampaign($campaign);
+//            $new_task->setTaskname($tasktype);
+//            $new_task->setOwner($creator_user);
+//            $new_task->setTaskmessage(NULL);
+//            $new_task->setMatrixfileversion(0);
+//            $new_task->setTaskstatus($default_task_status);
+//            $new_task->setPhase($tasktype->getPhaseid());
+//            $new_task->setCreatedAt($creationDate);
+//            $new_task->setCreatedby($creator_user);
+//            $new_task->setUpdatedAt($creationDate);
+//            $manager->persist($new_task);
+//        }
+//        $manager->flush();
+//
+//        ///////////////////////////////////////////////////////////
+//        //ADD THE FILE 1
+//        ///////////////////////////////////////////////////////////
+//        $project_file_datas = self::getProjectFileData();
+//
+//        //THIS IS A LITTLE MORE COMPLICATED THAN WE FIRST THOUGHT.
+//
+//        //WE MUST CHECK THE USER'S NAME , AND SET THE FILE-> USER TO THE SPECIFIED NAME....
+//
+//
+//        foreach ($project_file_datas as $project_file_data) {
+//
+//            //GRAB THE USER THAT CREATED THIS FILE IF EXISTS
+//            $user_that_created_this_file = $manager->getRepository('UserBundle:User')->findOneByUsername('bosdoit');
+//            $taskname = $manager->getRepository('TaskBundle:Taskname')->find(8);
+//            $the_task = $manager->getRepository('TaskBundle:Task')->findOneBy([
+//                'campaign'=> $campaign,
+//                'taskname' => $taskname
+//                    ]);
+//            $filetype = $manager->getRepository('CampaignBundle:Filetype')->findOneById($project_file_data['file_type_id']);
+//
+//            $file = new File();
+//            $file->setUuid($project_file_data['uuid']);
+//            $file->setFileName($project_file_data['file_name']);
+//            $file->setOriginalName($project_file_data['original_name']);
+//            $file->setContentType($project_file_data['content_type']);
+//            $file->setFileLength($project_file_data['file_length']);
+//            $file->setCreatedAt($creationDate);
+//            $file->setUpdatedAt($creationDate);
+//            $file->setCampaign($campaign);
+//            $file->setUser($project_file_data['user_creator_id'] ? $user_that_created_this_file : null);
+//            $file->setTask($project_file_data['task_id'] ? $the_task : null);
+//            $file->setFileType($project_file_data['file_type_id'] ? $filetype : null);
+//            $file->setVersion($project_file_data['version']);
+//            $file->setNotVisible(false);
+//            $file->setPath($project_file_data['path']);
+//
+//            $manager->persist($file);
+//        }
+//
+//            $jsondatastring = Self::defaultJsonData();
+//            $actual_parsing = self::parseTheLightdataString($jsondatastring,$campaign->getId(),$manager);
+//            $campaign->setLightdata($actual_parsing);
+//            $campaign->setMatrixfileUuid('e99fa036-c98f-481a-b83f-8e146abe64f4');
+//            $campaign->setMatrixfileVersion(1);
+//        $manager->flush();
+//
+//
+//
+//        echo 'Axe campaign created. Tasks Created Too. Added user as teammember & set as taskowner. Added the 18 files too.';
     }
 
     public function getProjectFileData() {

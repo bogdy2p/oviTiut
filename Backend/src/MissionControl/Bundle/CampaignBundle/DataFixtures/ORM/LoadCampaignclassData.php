@@ -18,37 +18,37 @@ class LoadCampaignclassData extends AbstractFixture implements OrderedFixtureInt
      * {@inheritDoc}
      */
     public function load(ObjectManager $manager) {
-        $creationDate = new \DateTime();
-        $creationDate->setTimezone(self::timezoneUTC());
-
-        try {
-            $filename = 'web/assets/datafiles/campaignclass.csv';
-
-            if (!file_exists($filename)) {
-                throw new Exception($filename . ' was not found !');
-            }
-
-            $thefile = fopen($filename, 'r');
-            if (!$thefile) {
-                throw new Exception($filename . ' open failed.');
-            }
-
-            while (!feof($thefile)) {
-
-                $line = fgetcsv($thefile);
-                if ($line[0] && $line[1] != NULL) {
-                    $Newcampaignclass = new Campaignclass();
-                    $Newcampaignclass->setName($line[1]);
-                    $manager->persist($Newcampaignclass);
-                }
-            }
-
-            $manager->flush();
-            echo 'Campaignclass data succesfully imported from ' . $filename;
-        } catch (Exception $e) {
-            echo 'Could not load Campaignclass data from '.$filename.' file. ';
-            echo " ";
-        }
+//        $creationDate = new \DateTime();
+//        $creationDate->setTimezone(self::timezoneUTC());
+//
+//        try {
+//            $filename = 'web/assets/datafiles/campaignclass.csv';
+//
+//            if (!file_exists($filename)) {
+//                throw new Exception($filename . ' was not found !');
+//            }
+//
+//            $thefile = fopen($filename, 'r');
+//            if (!$thefile) {
+//                throw new Exception($filename . ' open failed.');
+//            }
+//
+//            while (!feof($thefile)) {
+//
+//                $line = fgetcsv($thefile);
+//                if ($line[0] && $line[1] != NULL) {
+//                    $Newcampaignclass = new Campaignclass();
+//                    $Newcampaignclass->setName($line[1]);
+//                    $manager->persist($Newcampaignclass);
+//                }
+//            }
+//
+//            $manager->flush();
+//            echo 'Campaignclass data succesfully imported from ' . $filename;
+//        } catch (Exception $e) {
+//            echo 'Could not load Campaignclass data from '.$filename.' file. ';
+//            echo " ";
+//        }
     }
 
     /**
