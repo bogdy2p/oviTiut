@@ -26,10 +26,7 @@ use Rhumsaa\Uuid\Exception\UnsatisfiedDependencyException;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Component\HttpFoundation\File\File;
 use JMS\Serializer\SerializationContext;
-
-
 use MissionControl\Bundle\OviappBundle\Entity\Produs;
-
 
 class OviappController extends FOSRestController
 {
@@ -61,20 +58,41 @@ class OviappController extends FOSRestController
     public function getProduseAction(Request $request)
     {
 
+        $user = $this->getUser();
+
+
+//        die($user);
+        $produse = $this->getDoctrine()->getRepository('OviappBundle:Produs')->findAll();
+
+//        print_r($produse);
+        $output_array = array();
+
+        foreach ($produse as $produs) {
+
+            $id = $produs->getId();
+
+            $output_array[$id]['nume']           = $produs->getNume();
+            $output_array[$id]['pret']           = $produs->getPretLivrare();
+            $output_array[$id]['cantitate']      = $produs->getCantitate();
+            $output_array[$id]['unitate_masura'] = $produs->getUnitateMasura();
+        }
+
+
+//        print_r($output_array);
+//        die();
+
         //Instantiate response
         $response = new Response();
 
         $response->setStatusCode(200);
         $response->setContent(json_encode(array(
-            //'Role(DEBUG ONLy)' => $user->getRoles(),
-            'Total campaigns for this filter' => count($campaigns_array),
-            'Campaigns' => $campaigns_array,
+                //'Role(DEBUG ONLy)' => $user->getRoles(),
+            'Produse' => $output_array,
                 )
         ));
 
         return $response;
     }
-
 
     /**
      * @ApiDoc(
@@ -100,7 +118,8 @@ class OviappController extends FOSRestController
      * @return array
      * @View()
      */
-    public function getTestareAction(Request $request) {
+    public function getTestareAction(Request $request)
+    {
 
 
         return "vasile";
