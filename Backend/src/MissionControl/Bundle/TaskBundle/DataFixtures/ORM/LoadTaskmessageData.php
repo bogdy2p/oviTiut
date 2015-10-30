@@ -53,7 +53,7 @@ class LoadTaskmessageData extends AbstractFixture implements OrderedFixtureInter
 //        } catch (Exception $e) {
 //            echo 'Could not load Task MESSAGE data from taskmessage.csv file .', "\n";
 //        }
-        echo 'Load Task Message has been disabled.';
+//        echo 'Load Task Message has been disabled.';
     }
 
     /**
