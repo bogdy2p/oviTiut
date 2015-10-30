@@ -31,78 +31,78 @@ $divisions = $obj['divisions'];
 
 <div class="get_api" data-api="<?php echo $_COOKIE['api']; ?>">
 	<div class="close_window campaign evo-text-right"><i class="fa fa-times fa-2x"></i></div>
-	<h2 class="evo-header-big margin-top-0 text-swap font_stack_4">New Campaign</h2>
+	<h2 class="evo-header-big margin-top-0 text-swap font_stack_4">Nota receptie noua</h2>
 	
 	
-	<form name="new_campaign" id="new_campaign" action="<?php echo $this->container->getParameter('apiUrl'); ?>campaigns.json" method="POST">
+	<form name="new_campaign" id="new_campaign" action="<?php echo $this->container->getParameter('apiUrl'); ?>new_reception.json" method="POST">
 	
 
 	<div class='new-campaign-item-divider'></div>
-	<label for="campaign_name" class='float_label'>Campaign Name</label>
-	<input name="name" type="text" data-for='campaign_name' data-animation='topZero' class="form-control" placeholder="Campaign Name" required>
+	<label for="campaign_name" class='float_label'>Campazign Name</label>
+	<input name="name" type="text" data-for='campaign_name' data-animation='topZero' class="form-control" placeholder="Nume" required>
 
-	<div class='new-campaign-item-divider'></div>			
+<!--	<div class='new-campaign-item-divider'></div>
 	<label for="client" class='float_label'>Client Name</label>
 	<select class="sorting_options new_campaign_select ajaxSelector" data-for='client' data-animation='topZero' name="client" required>
 		<option value="" selected>Client Name</option>
 		<?php
-		foreach($clients as $key => $value) {
-			if($key != 8) {
-				echo '<option value="'.$key.'">'.$value.'</option>';
-			}
-		}
+//		foreach($clients as $key => $value) {
+//			if($key != 8) {
+//				echo '<option value="'.$key.'">'.$value.'</option>';
+//			}
+//		}
 		?>
-	</select>
+	</select>-->
 
-	<div class='new-campaign-item-divider'></div>			
+<!--	<div class='new-campaign-item-divider'></div>
 	<label for="division" class='float_label'>Division</label>
 	<select class="sorting_options new_campaign_select ajaxSelector" data-for='division' data-animation='topZero' name="division" disabled="disabled" required>
 		<option value="" selected>Division</option>
-	</select>
+	</select>-->
 						
 							
-	<div class='new-campaign-item-divider'></div>			
+<!--	<div class='new-campaign-item-divider'></div>
 	<label for="brand_name" class='float_label'>Brand Name</label>
 	<select class="sorting_options new_campaign_select ajaxSelector" data-for='brand_name' data-animation='topZero' name="brand" disabled="disabled" required>
 		<option value="" selected>Brand Name</option>
-	</select>
+	</select>-->
 
-	<div class='new-campaign-item-divider'></div>	
+<!--	<div class='new-campaign-item-divider'></div>
 	<label for="product_line" class='float_label'>Product Line</label>
 	<select class="sorting_options new_campaign_select ajaxSelector" data-for='product_line' data-animation='topZero' name="productline" disabled="disabled" required>
 		<option value="" selected>Product Line</option>
-	</select>
+	</select>-->
 					
-	<div class='new-campaign-item-divider'></div>		
+<!--	<div class='new-campaign-item-divider'></div>
 	<label for="product" class='float_label'>Product</label>
 	<select class="sorting_options new_campaign_select ajaxSelector" data-for='product' data-animation='topZero' name="product" disabled="disabled" required>
 		<option value="" selected>Product</option>
-	</select>
+	</select>-->
 
 	
-	<div class='new-campaign-item-divider'></div>	
+<!--	<div class='new-campaign-item-divider'></div>
 	<label for="country" class='float_label'>Country</label>
 	<select class="sorting_options new_campaign_select" data-for='country' data-animation='topZero' name="country" required>
-		<option value="0">Country</option>
+		<option value="0">Country</option>-->
 		<?php
-		foreach($countries as $key => $value) {
-			echo '<option value="'.$key.'">'.$value.'</option>';
-		}
-		?>
-	</select>
+//		foreach($countries as $key => $value) {
+//			echo '<option value="'.$key.'">'.$value.'</option>';
+//		}
+//		?>
+	<!--</select>-->
 
 
-	<div class='new-campaign-item-divider'></div>	
+<!--	<div class='new-campaign-item-divider'></div>
 	<label for="cdd" class='float_label'>Plan Approval Date</label>
 	<input name="client_deliverabledate" type="text" class="form-control datepicker" data-for='cdd' data-calendar='datePicker' placeholder="YYYY-MM-DD" required>
-	
+	-->
 	
 	<div class='new-campaign-item-divider'></div>							
-	<label for="cd" class='float_label'>Estimated Campaign End Date</label>
+	<label for="cd" class='float_label'>Data</label>
 	<input name="completion_date" type="text" class="form-control datepicker" data-for='cd' data-calendar='datePicker' placeholder="YYYY-MM-DD" required>
 
 	<div class="evo-space"></div>
-	<button class="evo-btn evo-btn-2">create campaign</button>
+	<button class="evo-btn evo-btn-2">Trimite !</button>
 	<div class="evo-space"></div>
 
 </div>

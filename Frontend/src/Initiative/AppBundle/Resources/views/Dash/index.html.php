@@ -1,8 +1,9 @@
 <?php $view->extend('::base.html.php') ?>
-
 <?php
 if(isset($_COOKIE['api'])) {
-	$url = $this->container->getParameter('apiUrl')."campaigns?filter=1";
+
+    
+        $url = $this->container->getParameter('apiUrl')."produse";
 	$accesstoken = $_COOKIE['api'];
 
 	$headr = array();
@@ -21,7 +22,10 @@ if(isset($_COOKIE['api'])) {
 
 	$obj = json_decode($result, true);
 
-	$campaigns_count = count($obj['Campaigns']);
+	$campaigns_count = count($obj['Produse']);
+
+        $campaigns_count = 10;
+//        die($campaigns_count);
 	$i = 0;
 
 
@@ -38,7 +42,7 @@ if(isset($_COOKIE['api'])) {
 	curl_close($ch);
 
 	$myProfile = json_decode($result2, true)[0];
-
+        
 	function getAvatarUrl($myProfile) {
 		if($myProfile['profile_picture_path']) {
 			$comment_avatar = $myProfile['profile_picture_path'];
@@ -67,7 +71,7 @@ if(isset($_COOKIE['api'])) {
 <div class="opacity"></div>
 
 <div id="new_campaign_container">
-<?php echo $view->render('InitiativeAppBundle:NewCampaign:index.html.php'); ?>
+<?php echo $view->render('InitiativeAppBundle:NewCampaign:index.html.php');?>
 </div>
 
 
@@ -125,11 +129,11 @@ if(isset($_COOKIE['api'])) {
 							<div class="task_bar">
 								<?php if($myProfile['user_role'] != "Viewer") { ?>
 									<div class="task_bar_left">
-										<button class="btn evo-btn-2 create_campaign_btn">create campaign</button>
+										<button class="btn evo-btn-2 create_campaign_btn">Creaza Nota Receptie</button>
 									</div>
 								<?php } ?>
 								<div class="task_bar_right">
-									<span class="evo-text-smaller">Only show</span>
+<!--									<span class="evo-text-smaller">Only show</span>
 									<select class="sorting_options" id="present-filter" >
 										<option value=".Build">Build</option>
 										<option value=".Approved">Approved</option>
@@ -140,7 +144,7 @@ if(isset($_COOKIE['api'])) {
 										<option value="completion:desc">Completion Score</option>
 										<option value="urgency:asc">Urgency</option>
 										<option value="responsibility:desc">Your Responsibility</option>
-									</select>
+									</select>-->
 								</div>
 							</div>
 						</div>

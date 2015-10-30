@@ -1,11 +1,14 @@
+
 <?php
+
+
 $request = $this->container->get('request');
 $routeName = $request->get('_route');
 ?>
 <!doctype html>
 <html>
 	<head>
-		<title>Unilever Dash</title>
+		<title>Ovi Aplicatie Dashboard</title>
 
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -44,3 +47,4 @@ $routeName = $request->get('_route');
 <div class="alert_bar"></div>
 
 <div class="loading_ico"></div>
+

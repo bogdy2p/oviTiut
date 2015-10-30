@@ -11,7 +11,10 @@ $headr[] = 'x-wsse: ApiKey="'.$accesstoken.'"';
 
 
 
-$url = $this->container->getParameter('apiUrl')."campaigns.json?filter=0";
+//$url = $this->container->getParameter('apiUrl')."campaigns.json?filter=0";
+$url = $this->container->getParameter('apiUrl')."produse.json";
+
+die('mortus');
 
 $ch = curl_init();
 
