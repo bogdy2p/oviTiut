@@ -18,11 +18,8 @@ $result=curl_exec($ch);
 curl_close($ch);
 
 $obj = json_decode($result, true);
-//
-//echo"<pre>";
-//print_r($obj);
+
 $furnizori = $obj['Furnizori'];
-//die();
 
 ?>
 
@@ -40,7 +37,7 @@ $furnizori = $obj['Furnizori'];
 
         <div class='new-campaign-item-divider'></div>
 	<label for="furnizor_existent" class='float_label'>Furnizor Existent</label>
-	<select class="sorting_options new_campaign_select ajaxSelector" data-for='furnizor_existent' data-animation='topZero' name="furnizor_existent" required>
+	<select class="sorting_options new_campaign_select ajaxSelector" data-for='furnizor_existent' data-animation='topZero' name="furnizor_existent">
 		<option value="" selected>Furnizor Existent</option>
 		<?php
 		foreach($furnizori as $key => $value) {
@@ -52,7 +49,7 @@ $furnizori = $obj['Furnizori'];
         
 	<div class='new-campaign-item-divider'></div>
 	<label for="furnizor_name" class='float_label'>Furnizor Nou</label>
-	<input name="furnizor_nou" type="text" data-for='furnizor_name' data-animation='topZero' class="form-control" placeholder="Nume Furnizor (Doar pentru furnizori noi)" required>
+	<input name="furnizor_nou" type="text" data-for='furnizor_name' data-animation='topZero' class="form-control" placeholder="NOU Furnizor (Doar pentru furnizori noi)">
 
 
 <!--	<div class='new-campaign-item-divider'></div>

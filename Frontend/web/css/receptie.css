@@ -1,0 +1,40 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Oct 31, 2015, 11:25:03 PM
+    Author     : pbc
+*/
+
+.receptie_container{
+    width:100%;
+    /*height: 100%;*/
+    text-align: center;
+    background-color: slategrey;
+}
+
+.receptie_top{
+    width: 100%;
+}
+.receptie_produse{
+
+}
+
+.receptie_bottom{
+
+}
+
+.receptie_top_stanga{
+    background: red;
+    text-align: left;
+    float: left;
+    width: 49%;
+}
+
+.receptie_top_dreapta{
+    background: green;
+    float: left;
+    width: 49%;
+}
