@@ -184,7 +184,7 @@ class OviappController extends FOSRestController
 
             $output_array[$id]['id']          = $reception->getId();
             $output_array[$id]['client']      = $reception->getClient();
-            $output_array[$id]['creata_de']   = $reception->getCreator();
+            $output_array[$id]['creata_de']   = $reception->getUser();
             $output_array[$id]['data_creare'] = $reception->getDateCreated();
             $output_array[$id]['produse']     = $reception->getProducts();
         }
@@ -194,7 +194,7 @@ class OviappController extends FOSRestController
 
         $response->setStatusCode(200);
         $response->setContent(json_encode(array(
-            'Receptii' => $output_array,
+            'Receptions' => $output_array,
                 )
         ));
         return $response;
@@ -234,7 +234,7 @@ class OviappController extends FOSRestController
 
             $output_array[$id]['id']          = $reception->getId();
             $output_array[$id]['client']      = $reception->getClient();
-            $output_array[$id]['creata_de']   = $reception->getCreator();
+            $output_array[$id]['creata_de']   = $reception->getUser();
             $output_array[$id]['data_creare'] = $reception->getDateCreated();
             $output_array[$id]['produse']     = $reception->getProducts();
         } else {
