@@ -28,6 +28,7 @@ use Symfony\Component\HttpFoundation\File\File;
 use JMS\Serializer\SerializationContext;
 use MissionControl\Bundle\OviappBundle\Entity\Produs;
 use MissionControl\Bundle\OviappBundle\Entity\Reception;
+use MissionControl\Bundle\OviappBundle\Entity\Furnizor;
 
 class OviappController extends FOSRestController
 {
@@ -231,13 +232,12 @@ class OviappController extends FOSRestController
         $output_array = array();
 
         if ($reception) {
-            $id = $reception->getId();
 
-            $output_array[$id]['id']          = $reception->getId();
-            $output_array[$id]['client']      = $reception->getClient();
-            $output_array[$id]['creata_de']   = $reception->getUser();
-            $output_array[$id]['data_creare'] = $reception->getDateCreated();
-            $output_array[$id]['produse']     = $reception->getProducts();
+            $output_array['id']          = $reception->getId();
+            $output_array['client']      = $reception->getClient()->getName();
+            $output_array['creata_de']   = $reception->getUser();
+            $output_array['data_creare'] = $reception->getDateCreated();
+            $output_array['produse']     = $reception->getProducts();
         } else {
             $response->setStatusCode(404);
             return $response;
@@ -246,7 +246,7 @@ class OviappController extends FOSRestController
         $response->setStatusCode(200);
         $response->setContent(json_encode(array(
             //'Role(DEBUG ONLy)' => $user->getRoles(),
-            'Receptie' => $output_array,
+            'Reception' => $output_array,
                 )
         ));
 
@@ -267,7 +267,8 @@ class OviappController extends FOSRestController
      *       {"name"="_format",               "dataType"="string","requirement"="json|xml","description"="Format"},
      *    },
      *    parameters={
-     *       {"name"="client",                  "dataType"="text",  "required"=true, "description"="The reception client"},
+     *       {"name"="furnizor_existent",                  "dataType"="text",  "required"=true, "description"="The id of a existing furnizor"},
+     *       {"name"="furnizor_nou",                  "dataType"="text",  "required"=true, "description"="The name of a new furnizor"},
      *       {"name"="creator",                "dataType"="string","required"=true,"description"="The reception creator."},
      *       {"name"="produse",                 "dataType"="string","required"=true,"description"="The reception products."},
      * }
@@ -288,25 +289,39 @@ class OviappController extends FOSRestController
         $key       = Uuid::uuid4()->toString();
         $token_key = Uuid::uuid4()->toString();
 
-        $client_id  = $request->get('furnizor_existent');
+        $id_furnizor_existent = $request->get('furnizor_existent');
+        $string_furnizor_nou  = $request->get('furnizor_nou');
+
+        if ($id_furnizor_existent || $string_furnizor_nou) {
+//
+//            print_r($id_furnizor_existent);
+//            print_r(" <br> ");
+//            print_r($string_furnizor_nou);
+        } else {
+            $response->setStatusCode(403);
+            $response->setContent(json_encode(array(
+                'status' => 'failed',
+                'message' => "One of the furnizor fields must be set!",
+            )));
+            return $response;
+        }
+
+
         $creator_id = $request->get('creator');
         $produse_id = $request->get('produse');
 
 
-        $client = $this->getDoctrine()->getRepository('OviappBundle:Furnizor')->find($client_id);
+        $furnizor_existent = $this->getDoctrine()->getRepository('OviappBundle:Furnizor')->find($id_furnizor_existent);
 
-        if ($client) {
-
+        if ($furnizor_existent) {
             $reception = new Reception();
             $reception->setUser('$client');
-            $reception->setClient($client);
+            $reception->setClient($furnizor_existent);
             $reception->setProducts('produse_id');
             $reception->setDateCreated('2012-02-02');
             $reception->setDateUpdated('2014-02-02');
-
             $em->persist($reception);
             $em->flush();
-
             $response->setStatusCode(201);
             $response->setContent(json_encode(array(
                 'success' => true,
@@ -315,11 +330,36 @@ class OviappController extends FOSRestController
             );
 
             return $response;
+        } else {
+
+            $furnizor_nou = new Furnizor();
+            $furnizor_nou->setName($string_furnizor_nou);
+            $furnizor_nou->setAdress('null');
+            $furnizor_nou->setPhone('null');
+            $em->persist($furnizor_nou);
+
+
+            $reception = new Reception();
+            $reception->setUser('date_user_aici');
+            $reception->setClient($furnizor_nou);
+            $reception->setProducts('produse_id');
+            $reception->setDateCreated('2016-02-02');
+            $reception->setDateUpdated('2015-02-02');
+
+            $em->flush();
+
+            $response->setStatusCode(201);
+            $response->setContent(json_encode(array(
+                'success' => true,
+                'ReceptionId' => $reception->getId(),
+                ))
+            );
+            return $response;
         }
         $response->setStatusCode(404);
         $response->setContent(json_encode(array(
             'success' => false,
-            'message' => 'Client/Furnizor not found for the specific input',
+            'message' => 'Client/Furnizor Input Error',
         )));
         return $response;
     }
