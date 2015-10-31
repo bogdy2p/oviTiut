@@ -1,6 +1,6 @@
 <?php
 
-$url = $this->container->getParameter('apiUrl')."options.json";
+$url = $this->container->getParameter('apiUrl')."furnizors.json";
 
 $accesstoken = $_COOKIE['api'];
 
@@ -18,6 +18,12 @@ $result=curl_exec($ch);
 curl_close($ch);
 
 $obj = json_decode($result, true);
+//
+//echo"<pre>";
+//print_r($obj);
+$furnizori = $obj['Furnizori'];
+//die();
+
 ?>
 
 <div class="get_api" data-api="<?php echo $_COOKIE['api']; ?>">
@@ -27,13 +33,31 @@ $obj = json_decode($result, true);
 	
 	<form name="new_campaign" id="new_campaign" action="<?php echo $this->container->getParameter('apiUrl'); ?>receptions.json" method="POST">
 
-	<div class='new-campaign-item-divider'></div>
-	<label for="furnizor_name" class='float_label'>Nume receptie</label>
-	<input name="Furnizor" type="text" data-for='furnizor_name' data-animation='topZero' class="form-control" placeholder="Furnizor" required>
 
-	<div class='new-campaign-item-divider'></div>							
+<!--	<div class='new-campaign-item-divider'></div>
+	<label for="furnizor_name" class='float_label'>Furnizor Existent</label>
+	<input name="furnizor_existent" type="text" data-for='furnizor_name' data-animation='topZero' class="form-control" placeholder="Alege Furnizor Existent" required>-->
+
+        <div class='new-campaign-item-divider'></div>
+	<label for="furnizor_existent" class='float_label'>Furnizor Existent</label>
+	<select class="sorting_options new_campaign_select ajaxSelector" data-for='furnizor_existent' data-animation='topZero' name="furnizor_existent" required>
+		<option value="" selected>Furnizor Existent</option>
+		<?php
+		foreach($furnizori as $key => $value) {
+				echo '<option value="'.$value["id"].'">'.$value["name"].'</option>';
+		}
+		?>
+	</select>
+
+        
+	<div class='new-campaign-item-divider'></div>
+	<label for="furnizor_name" class='float_label'>Furnizor Nou</label>
+	<input name="furnizor_nou" type="text" data-for='furnizor_name' data-animation='topZero' class="form-control" placeholder="Nume Furnizor (Doar pentru furnizori noi)" required>
+
+
+<!--	<div class='new-campaign-item-divider'></div>
 	<label for="cd" class='float_label'>Data</label>
-	<input name="completion_date" type="text" class="form-control datepicker" data-for='cd' data-calendar='datePicker' placeholder="YYYY-MM-DD" required>
+	<input name="completion_date" type="text" class="form-control datepicker" data-for='cd' data-calendar='datePicker' placeholder="YYYY-MM-DD" required>-->
 
 	<div class="evo-space"></div>
 	<button class="evo-btn evo-btn-2">Trimite !</button>
