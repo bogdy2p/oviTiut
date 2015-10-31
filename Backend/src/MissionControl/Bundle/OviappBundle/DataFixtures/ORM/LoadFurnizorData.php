@@ -25,6 +25,11 @@ class LoadFurnizorData extends AbstractFixture implements OrderedFixtureInterfac
         $creationDate->setTimezone(self::timezoneUTC());
 
         echo "Creare Furnizor Default !";
+        $furnizor = new Furnizor();
+        $furnizor->setName('SC BARDI AUTO SRL');
+        $furnizor->setAdress('Adresa Bardi Auto ');
+        $furnizor->setPhone('001100110001');
+        $manager->persist($furnizor);
         for ($i = 0; $i <= 3; $i++) {
             $furnizor = new Furnizor();
 
@@ -34,6 +39,10 @@ class LoadFurnizorData extends AbstractFixture implements OrderedFixtureInterfac
 
             $manager->persist($furnizor);
         }
+
+
+
+
         $manager->flush();
     }
 
