@@ -276,7 +276,8 @@ class OviappController extends FOSRestController
      */
     public function postReceptionAction(Request $request)
     {
-        $user = $this->getUser();
+        $user     = $this->getUser();
+        $response = new Response();
 
         $creationDate = new \DateTime();
         $creationDate->setTimezone(self::timezoneUTC());
@@ -290,27 +291,36 @@ class OviappController extends FOSRestController
         $creator_id = $request->get('creator');
         $produse_id = $request->get('produse');
 
-        $response = new Response();
 
+        $client = $this->getDoctrine()->getRepository('OviappBundle:Furnizor')->find($client_id);
 
-        $reception = new Reception();
+        if ($client) {
 
-        $reception->setClient($user ? $user : 'asd');
-        $reception->setCreator($creator_id);
-        $reception->setProducts($produse_id);
-        $reception->setDateCreated('$creationDate');
-        $reception->setDateUpdated('$creationDate');
+            $reception = new Reception();
+            $reception->setUser('$client');
+            $reception->setClient($client);
+            
+            $reception->setProducts('produse_id');
+            $reception->setDateCreated('2012-02-02');
+            $reception->setDateUpdated('2014-02-02');
 
-        $em->persist($reception);
-        $em->flush();
+            $em->persist($reception);
+            $em->flush();
 
-        $response->setStatusCode(201);
+            $response->setStatusCode(201);
+            $response->setContent(json_encode(array(
+                'success' => true,
+                'ReceptionId' => $reception->getId(),
+                ))
+            );
+
+            return $response;
+        }
+        $response->setStatusCode(404);
         $response->setContent(json_encode(array(
-            'success' => true,
-            'ReceptionId' => $reception->getId(),
-            ))
-        );
-
+            'success' => false,
+            'message' => 'Client/Furnizor not found for the specific input',
+        )));
         return $response;
+        }
     }
-}

@@ -66,7 +66,6 @@ class Reception
      */
     private $products;
 
-
     /**
      * Get id
      *
@@ -78,27 +77,27 @@ class Reception
     }
 
     /**
-     * Set creator
+     * Set user
      *
-     * @param string $creator
+     * @param string $user
      *
      * @return Reception
      */
-    public function setCreator($creator)
+    public function setUser($user)
     {
-        $this->creator = $creator;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * Get creator
+     * Get user
      *
      * @return string
      */
-    public function getCreator()
+    public function getUser()
     {
-        return $this->creator;
+        return $this->user;
     }
 
     /**

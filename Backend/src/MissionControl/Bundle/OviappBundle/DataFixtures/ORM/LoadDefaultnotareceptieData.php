@@ -31,7 +31,7 @@ class LoadDefaultnotareceptieData extends AbstractFixture implements OrderedFixt
         $furnizor = $manager->getRepository('OviappBundle:Furnizor')->findOneByName('NumeFurnizor1');
 
         $receptie->setClient($furnizor);
-        $receptie->setCreator('date_creator');
+        $receptie->setUser('date_creator');
         $receptie->setDateCreated('data_creare');
         $receptie->setDateUpdated('data_update');
         $receptie->setProducts('array_produse');
