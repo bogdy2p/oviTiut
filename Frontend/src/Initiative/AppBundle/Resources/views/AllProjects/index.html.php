@@ -25,8 +25,8 @@ if (isset($_COOKIE['api'])) {
 
     $obj = json_decode($result, true);
 
-    $campaigns_count = count($obj['Produse']);
-    $campaigns       = $obj['Produse'];
+    $produse_count = count($obj['Produse']);
+    $produse       = $obj['Produse'];
     $i               = 0;
 
     $url         = $this->container->getParameter('apiUrl')."users/".$_COOKIE['dash_user_id']."/info";
@@ -68,32 +68,20 @@ if (isset($_COOKIE['api'])) {
                         <th data-sort="string">Pret</th>
                         <th data-sort="string">Cantitate</th>
                         <th data-sort="string">Unitate Masura</th>
-                        <!--<th data-sort="string">Project<br />Name</th>-->
-                        <!--<th data-sort="int">Start <br>Year</th>-->
-                        <!--<th data-sort="string">Market</th>-->
-<?php if ($role == 3) { ?>
-                            <th class="disabled-sort"></th>
+                      
+                        <?php if ($role == 3) { ?>
+                            <!--<th class="disabled-sort"></th>-->
                         <?php } ?>
                     </tr>
                 </thead>
                 <tbody>
-                        <?php foreach ($campaigns as $produs) { ?>
+                        <?php foreach ($produse as $produs) { ?>
                         <tr class="hover_row">
                             <td><p class="evo-text-smaller"><?php echo $produs['id']; ?></p></td>
-                            <td><p class="evo-text-smaller"><a href="produs/<?php echo $produs['id']; ?>/0"><?php echo $produs['nume']; ?></a></p></td>
+                            <td><p class="evo-text-smaller"><a href="products/<?php echo $produs['id']; ?>"><?php echo $produs['nume']; ?></a></p></td>
                             <td><p class="evo-text-smaller"><?php echo $produs['pret']; ?></p></td>
                             <td><p class="evo-text-smaller"><?php echo $produs['cantitate']; ?></p></td>
                             <td><p class="evo-text-smaller"><?php echo $produs['unitate_masura']; ?></p></td>
-                            <!--<td><p class="evo-text-smaller"><?php echo $produs['Productline']; ?></p></td>-->
-                            
-<!--                            <td><p class="evo-text-smaller"></p></td>
-                            <td><p class="evo-text-smaller"></p></td>
-                            <td><p class="evo-text-smaller"></p></td>-->
-                            
-                            <!--<td><p class="evo-text-smaller"><?php echo $produs['Country']; ?></p></td>-->
-    <?php if ($role == 3) { ?>
-                                        <!--<td><i class="fa fa-trash-o clickable hide_campaign" data-campaignId="<?php echo $produs['CampaignID']; ?>"></i></td>-->
-    <?php } ?>
                         </tr>
                             <?php $i++; ?>
                         <?php } ?>
