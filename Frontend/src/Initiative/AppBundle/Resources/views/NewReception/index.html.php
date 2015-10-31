@@ -10,7 +10,6 @@ $headr[] = 'Content-type: application/json';
 $headr[] = 'x-wsse: ApiKey="'.$accesstoken.'"';
 
 $ch = curl_init();
-
 curl_setopt($ch, CURLOPT_URL,$url);
 curl_setopt($ch, CURLOPT_HTTPHEADER,$headr);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -19,14 +18,6 @@ $result=curl_exec($ch);
 curl_close($ch);
 
 $obj = json_decode($result, true);
-
-$clients = $obj['clients'];
-$brands = $obj['brands'];
-$products = $obj['products'];
-$countries = $obj['countries'];
-$product_lines = $obj['product_lines'];
-$divisions = $obj['divisions'];
-
 ?>
 
 <div class="get_api" data-api="<?php echo $_COOKIE['api']; ?>">
@@ -35,68 +26,11 @@ $divisions = $obj['divisions'];
 	
 	
 	<form name="new_campaign" id="new_campaign" action="<?php echo $this->container->getParameter('apiUrl'); ?>receptions.json" method="POST">
-	
 
 	<div class='new-campaign-item-divider'></div>
-	<label for="campaign_name" class='float_label'>Campazign Name</label>
-	<input name="client" type="text" data-for='campaign_name' data-animation='topZero' class="form-control" placeholder="Client" required>
+	<label for="furnizor_name" class='float_label'>Nume receptie</label>
+	<input name="Furnizor" type="text" data-for='furnizor_name' data-animation='topZero' class="form-control" placeholder="Furnizor" required>
 
-<!--	<div class='new-campaign-item-divider'></div>
-	<label for="client" class='float_label'>Client Name</label>
-	<select class="sorting_options new_campaign_select ajaxSelector" data-for='client' data-animation='topZero' name="client" required>
-		<option value="" selected>Client Name</option>
-		<?php
-//		foreach($clients as $key => $value) {
-//			if($key != 8) {
-//				echo '<option value="'.$key.'">'.$value.'</option>';
-//			}
-//		}
-		?>
-	</select>-->
-
-<!--	<div class='new-campaign-item-divider'></div>
-	<label for="division" class='float_label'>Division</label>
-	<select class="sorting_options new_campaign_select ajaxSelector" data-for='division' data-animation='topZero' name="division" disabled="disabled" required>
-		<option value="" selected>Division</option>
-	</select>-->
-						
-							
-<!--	<div class='new-campaign-item-divider'></div>
-	<label for="brand_name" class='float_label'>Brand Name</label>
-	<select class="sorting_options new_campaign_select ajaxSelector" data-for='brand_name' data-animation='topZero' name="brand" disabled="disabled" required>
-		<option value="" selected>Brand Name</option>
-	</select>-->
-
-<!--	<div class='new-campaign-item-divider'></div>
-	<label for="product_line" class='float_label'>Product Line</label>
-	<select class="sorting_options new_campaign_select ajaxSelector" data-for='product_line' data-animation='topZero' name="productline" disabled="disabled" required>
-		<option value="" selected>Product Line</option>
-	</select>-->
-					
-<!--	<div class='new-campaign-item-divider'></div>
-	<label for="product" class='float_label'>Product</label>
-	<select class="sorting_options new_campaign_select ajaxSelector" data-for='product' data-animation='topZero' name="product" disabled="disabled" required>
-		<option value="" selected>Product</option>
-	</select>-->
-
-	
-<!--	<div class='new-campaign-item-divider'></div>
-	<label for="country" class='float_label'>Country</label>
-	<select class="sorting_options new_campaign_select" data-for='country' data-animation='topZero' name="country" required>
-		<option value="0">Country</option>-->
-		<?php
-//		foreach($countries as $key => $value) {
-//			echo '<option value="'.$key.'">'.$value.'</option>';
-//		}
-//		?>
-	<!--</select>-->
-
-
-<!--	<div class='new-campaign-item-divider'></div>
-	<label for="cdd" class='float_label'>Plan Approval Date</label>
-	<input name="client_deliverabledate" type="text" class="form-control datepicker" data-for='cdd' data-calendar='datePicker' placeholder="YYYY-MM-DD" required>
-	-->
-	
 	<div class='new-campaign-item-divider'></div>							
 	<label for="cd" class='float_label'>Data</label>
 	<input name="completion_date" type="text" class="form-control datepicker" data-for='cd' data-calendar='datePicker' placeholder="YYYY-MM-DD" required>

@@ -35,7 +35,6 @@ $divisions = $obj['divisions'];
 	
 	
 	<form name="new_campaign" id="new_campaign" action="<?php echo $this->container->getParameter('apiUrl'); ?>receptions.json" method="POST">
-	
 
 	<div class='new-campaign-item-divider'></div>
 	<label for="campaign_name" class='float_label'>Campazign Name</label>
@@ -54,24 +53,7 @@ $divisions = $obj['divisions'];
 		?>
 	</select>-->
 
-<!--	<div class='new-campaign-item-divider'></div>
-	<label for="division" class='float_label'>Division</label>
-	<select class="sorting_options new_campaign_select ajaxSelector" data-for='division' data-animation='topZero' name="division" disabled="disabled" required>
-		<option value="" selected>Division</option>
-	</select>-->
-						
-							
-<!--	<div class='new-campaign-item-divider'></div>
-	<label for="brand_name" class='float_label'>Brand Name</label>
-	<select class="sorting_options new_campaign_select ajaxSelector" data-for='brand_name' data-animation='topZero' name="brand" disabled="disabled" required>
-		<option value="" selected>Brand Name</option>
-	</select>-->
 
-<!--	<div class='new-campaign-item-divider'></div>
-	<label for="product_line" class='float_label'>Product Line</label>
-	<select class="sorting_options new_campaign_select ajaxSelector" data-for='product_line' data-animation='topZero' name="productline" disabled="disabled" required>
-		<option value="" selected>Product Line</option>
-	</select>-->
 					
 <!--	<div class='new-campaign-item-divider'></div>
 	<label for="product" class='float_label'>Product</label>

@@ -7,9 +7,10 @@ $routeName = $request->get('_route');
 
 <?php
 //$url = $this->container->getParameter('apiUrl')."campaigns/".$project_id."/tasks";
-$url = $this->container->getParameter('apiUrl')."produse";
+$url = $this->container->getParameter('apiUrl')."receptions/3";
 
-die('mortus');
+//print_r($url);
+
 $accesstoken = $_COOKIE['api'];
 
 $headr = array();
@@ -27,12 +28,16 @@ $result2=curl_exec($ch);
 curl_close($ch);
 
 $tasks = json_decode($result2, true);
+//print_r("<br>");
+//print_r($tasks);
+//print_r("<br>");
+//die('mortusZZZZZZZZ');
 
-$task = $tasks['Tasks'];
+$task = $tasks['Receptie'];
 
 
 $totalTasks = count($task);
-
+print_r($totalTasks);
 $i = 0;
 $taskIds = array();
 while($i <= $totalTasks-1) {

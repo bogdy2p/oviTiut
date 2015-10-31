@@ -3,7 +3,7 @@
 if(isset($_COOKIE['api'])) {
 
     
-        $url = $this->container->getParameter('apiUrl')."produse";
+        $url = $this->container->getParameter('apiUrl')."receptions.json";
 	$accesstoken = $_COOKIE['api'];
 
 	$headr = array();
@@ -22,14 +22,17 @@ if(isset($_COOKIE['api'])) {
 
 	$obj = json_decode($result, true);
 
-	$campaigns_count = count($obj['Produse']);
 
-        $campaigns_count = 10;
+//        var_dump($obj);
+
+	$campaigns_count = count($obj['Receptions']);
+
+//        $campaigns_count = 2;
 //        die($campaigns_count);
 	$i = 0;
 
 
-
+//
 	$url = $this->container->getParameter('apiUrl')."users/".$_COOKIE['dash_user_id']."/profile.json";
 
 	$ch = curl_init();
@@ -42,11 +45,11 @@ if(isset($_COOKIE['api'])) {
 	curl_close($ch);
 
 	$myProfile = json_decode($result2, true)[0];
-        
+
 	function getAvatarUrl($myProfile) {
 		if($myProfile['profile_picture_path']) {
 			$comment_avatar = $myProfile['profile_picture_path'];
-		} 
+		}
 		if (isset($comment_avatar)) {
 			$comment_avatar2 = substr($comment_avatar, 0, 3);
 			$comment_avatar3 = substr($comment_avatar, -3);
@@ -71,7 +74,7 @@ if(isset($_COOKIE['api'])) {
 <div class="opacity"></div>
 
 <div id="new_campaign_container">
-<?php echo $view->render('InitiativeAppBundle:NewCampaign:index.html.php');?>
+<?php echo $view->render('InitiativeAppBundle:NewReception:index.html.php');?>
 </div>
 
 

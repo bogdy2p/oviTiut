@@ -11,7 +11,7 @@ class DashController extends Controller
     
         //render a PHP template instead
         return $this->render(
-            'InitiativeAppBundle:Dash:index.html.php'
+            'InitiativeAppBundle:Oviapp:defaultpageindex.html.php'
         );
 
     }
