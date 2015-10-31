@@ -75,6 +75,7 @@ class OviappController extends FOSRestController
 
             $id = $produs->getId();
 
+            $output_array[$id]['id']             = $produs->getId();
             $output_array[$id]['nume']           = $produs->getNume();
             $output_array[$id]['pret']           = $produs->getPretLivrare();
             $output_array[$id]['cantitate']      = $produs->getCantitate();
@@ -299,7 +300,7 @@ class OviappController extends FOSRestController
             $reception = new Reception();
             $reception->setUser('$client');
             $reception->setClient($client);
-            
+
             $reception->setProducts('produse_id');
             $reception->setDateCreated('2012-02-02');
             $reception->setDateUpdated('2014-02-02');
@@ -322,5 +323,5 @@ class OviappController extends FOSRestController
             'message' => 'Client/Furnizor not found for the specific input',
         )));
         return $response;
-        }
     }
+}
