@@ -34,12 +34,12 @@ $divisions = $obj['divisions'];
 	<h2 class="evo-header-big margin-top-0 text-swap font_stack_4">Nota receptie noua</h2>
 	
 	
-	<form name="new_campaign" id="new_campaign" action="<?php echo $this->container->getParameter('apiUrl'); ?>new_reception.json" method="POST">
+	<form name="new_campaign" id="new_campaign" action="<?php echo $this->container->getParameter('apiUrl'); ?>receptions.json" method="POST">
 	
 
 	<div class='new-campaign-item-divider'></div>
 	<label for="campaign_name" class='float_label'>Campazign Name</label>
-	<input name="name" type="text" data-for='campaign_name' data-animation='topZero' class="form-control" placeholder="Nume" required>
+	<input name="client" type="text" data-for='campaign_name' data-animation='topZero' class="form-control" placeholder="Client" required>
 
 <!--	<div class='new-campaign-item-divider'></div>
 	<label for="client" class='float_label'>Client Name</label>
