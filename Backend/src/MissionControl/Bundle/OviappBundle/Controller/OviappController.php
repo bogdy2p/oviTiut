@@ -32,6 +32,11 @@ use MissionControl\Bundle\OviappBundle\Entity\Reception;
 class OviappController extends FOSRestController
 {
 
+    public function timezoneUTC()
+    {
+        return new \DateTimeZone('UTC');
+    }
+
     /**
      * @ApiDoc(
      *    description = "Fetches all produse momentarely",
@@ -61,11 +66,9 @@ class OviappController extends FOSRestController
 
         $user = $this->getUser();
 
+        $produse = $this->getDoctrine()
+                ->getRepository('OviappBundle:Produs')->findAll();
 
-//        die($user);
-        $produse = $this->getDoctrine()->getRepository('OviappBundle:Produs')->findAll();
-
-//        print_r($produse);
         $output_array = array();
 
         foreach ($produse as $produs) {
@@ -79,14 +82,11 @@ class OviappController extends FOSRestController
         }
 
 
-//        print_r($output_array);
-//        die();
         //Instantiate response
         $response = new Response();
 
         $response->setStatusCode(200);
         $response->setContent(json_encode(array(
-            //'Role(DEBUG ONLy)' => $user->getRoles(),
             'Produse' => $output_array,
                 )
         ));
@@ -119,7 +119,8 @@ class OviappController extends FOSRestController
         $response = new Response();
 
 
-        $produs = $this->getDoctrine()->getRepository('OviappBundle:Produs')->findOneById($product_id);
+        $produs = $this->getDoctrine()
+                ->getRepository('OviappBundle:Produs')->findOneById($product_id);
 
         $output_array = array();
 
@@ -171,8 +172,10 @@ class OviappController extends FOSRestController
      */
     public function getReceptionsAction(Request $request)
     {
-        $user         = $this->getUser();
-        $receptions   = $this->getDoctrine()->getRepository('OviappBundle:Reception')->findAll();
+        $user       = $this->getUser();
+        $receptions = $this->getDoctrine()
+                ->getRepository('OviappBundle:Reception')->findAll();
+
         $output_array = array();
 
         foreach ($receptions as $reception) {
@@ -245,6 +248,68 @@ class OviappController extends FOSRestController
             'Receptie' => $output_array,
                 )
         ));
+
+        return $response;
+    }
+
+    /**
+     * @ApiDoc(
+     *    description = "Creates and saves a new reception.",
+     *    section="A_POST_RECEPTION",
+     *    statusCodes = {
+     *     201 = "Returned when the reception was added to the database",
+     *     400 = "Returned when the validation returns false ",
+     *     403 = {"Invalid API KEY", "Incorrect combination of request inputs."},
+     *     500 = "Header x-wsse does not exist"
+     *    },
+     *    requirements = {
+     *       {"name"="_format",               "dataType"="string","requirement"="json|xml","description"="Format"},
+     *    },
+     *    parameters={
+     *       {"name"="client",                  "dataType"="text",  "required"=true, "description"="The reception client"},
+     *       {"name"="creator",                "dataType"="string","required"=true,"description"="The reception creator."},
+     *       {"name"="produse",                 "dataType"="string","required"=true,"description"="The reception products."},
+     * }
+     * )
+     * return string
+     * @View()
+     */
+    public function postReceptionAction(Request $request)
+    {
+        $user = $this->getUser();
+
+        $creationDate = new \DateTime();
+        $creationDate->setTimezone(self::timezoneUTC());
+
+        $em = $this->getDoctrine()->getManager();
+
+        $key       = Uuid::uuid4()->toString();
+        $token_key = Uuid::uuid4()->toString();
+
+        $client_id  = $request->get('client');
+        $creator_id = $request->get('creator');
+        $produse_id = $request->get('produse');
+
+        $response = new Response();
+
+
+        $reception = new Reception();
+
+        $reception->setClient($user ? $user : 'asd');
+        $reception->setCreator($creator_id);
+        $reception->setProducts($produse_id);
+        $reception->setDateCreated('$creationDate');
+        $reception->setDateUpdated('$creationDate');
+
+        $em->persist($reception);
+        $em->flush();
+
+        $response->setStatusCode(201);
+        $response->setContent(json_encode(array(
+            'success' => true,
+            'ReceptionId' => $reception->getId(),
+            ))
+        );
 
         return $response;
     }

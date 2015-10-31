@@ -3,6 +3,14 @@
 namespace MissionControl\Bundle\OviappBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+//ENTITATEA RECEPTIE E PRACTIC " USER "
+//ENTITATEA PRODUS E PRACTIC " CAMPANIE "
+use MissionControl\Bundle\OviappBundle\Entity\Furnizor;
+use Doctrine\Common\Collections\ArrayCollection;
+use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\ExclusionPolicy;
+use JMS\Serializer\Annotation\Expose;
+use JMS\Serializer\Annotation\Exclude;
 
 /**
  * Reception
@@ -22,11 +30,20 @@ class Reception
     private $id;
 
     /**
+     * @var Client
+     *
+     * @ORM\ManyToOne(targetEntity="Furnizor", inversedBy="receptions")
+     * @ORM\JoinColumn(name="furnizor_id", referencedColumnName="id")
+     * @Expose
+     */
+    protected $client;
+
+    /**
      * @var string
      *
-     * @ORM\Column(name="client", type="string", length=255)
+     * @ORM\Column(name="user_creator", type="string", length=255)
      */
-    private $client;
+    private $user;
 
     /**
      * @var string
@@ -41,13 +58,6 @@ class Reception
      * @ORM\Column(name="date_updated", type="string", length=255)
      */
     private $dateUpdated;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="creator", type="string", length=255)
-     */
-    private $creator;
 
     /**
      * @var string
@@ -68,27 +78,27 @@ class Reception
     }
 
     /**
-     * Set client
+     * Set creator
      *
-     * @param string $client
+     * @param string $creator
      *
      * @return Reception
      */
-    public function setClient($client)
+    public function setCreator($creator)
     {
-        $this->client = $client;
+        $this->creator = $creator;
 
         return $this;
     }
 
     /**
-     * Get client
+     * Get creator
      *
      * @return string
      */
-    public function getClient()
+    public function getCreator()
     {
-        return $this->client;
+        return $this->creator;
     }
 
     /**
@@ -140,30 +150,6 @@ class Reception
     }
 
     /**
-     * Set creator
-     *
-     * @param string $creator
-     *
-     * @return Reception
-     */
-    public function setCreator($creator)
-    {
-        $this->creator = $creator;
-
-        return $this;
-    }
-
-    /**
-     * Get creator
-     *
-     * @return string
-     */
-    public function getCreator()
-    {
-        return $this->creator;
-    }
-
-    /**
      * Set products
      *
      * @param string $products
@@ -186,5 +172,28 @@ class Reception
     {
         return $this->products;
     }
-}
 
+    /**
+     * Set client
+     *
+     * @param \MissionControl\Bundle\OviappBundle\Entity\Furnizor $client
+     *
+     * @return Reception
+     */
+    public function setClient(\MissionControl\Bundle\OviappBundle\Entity\Furnizor $client = null)
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Get client
+     *
+     * @return \MissionControl\Bundle\OviappBundle\Entity\Furnizor
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+}
