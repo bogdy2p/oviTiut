@@ -288,7 +288,7 @@ class OviappController extends FOSRestController
         $key       = Uuid::uuid4()->toString();
         $token_key = Uuid::uuid4()->toString();
 
-        $client_id  = $request->get('client');
+        $client_id  = $request->get('furnizor_existent');
         $creator_id = $request->get('creator');
         $produse_id = $request->get('produse');
 
@@ -300,7 +300,6 @@ class OviappController extends FOSRestController
             $reception = new Reception();
             $reception->setUser('$client');
             $reception->setClient($client);
-
             $reception->setProducts('produse_id');
             $reception->setDateCreated('2012-02-02');
             $reception->setDateUpdated('2014-02-02');
@@ -322,6 +321,63 @@ class OviappController extends FOSRestController
             'success' => false,
             'message' => 'Client/Furnizor not found for the specific input',
         )));
+        return $response;
+    }
+
+    /**
+     * @ApiDoc(
+     *    description = "Get all furnizori array data",
+     *    section="A_Products",
+     *    statusCodes = {
+     *     200 = "Returned when the request is without errors",
+     *     400 = "This call is only for administrators.",
+     *     403 = "Invalid API KEY",
+     *     500 = "Header x-wsse does not exist"
+     *    },
+     *    requirements = {
+     *       {"name" = "_format","requirement" = "json|xml"}
+     *    },
+     *  parameters={
+     *       {"name"="filter",  "dataType"="integer","required"=false,"description"="Default filter is 0
+     *       ( , 3 = Campaignstatus(Completed,Cancelled) , 4 = Disabled Campaigns (ADMIN Only) "},
+     *
+     *
+     * }
+     *
+     * )
+     * @return array
+     * @View()
+     */
+    public function getFurnizorsAction(Request $request)
+    {
+
+        $user = $this->getUser();
+
+        $furnizori = $this->getDoctrine()
+                ->getRepository('OviappBundle:Furnizor')->findAll();
+
+        $output_array = array();
+
+        foreach ($furnizori as $furnizor) {
+
+            $id = $furnizor->getId();
+
+            $output_array[$id]['id']     = $furnizor->getId();
+            $output_array[$id]['name']   = $furnizor->getName();
+            $output_array[$id]['adress'] = $furnizor->getAdress();
+            $output_array[$id]['phone']  = $furnizor->getPhone();
+        }
+
+
+        //Instantiate response
+        $response = new Response();
+
+        $response->setStatusCode(200);
+        $response->setContent(json_encode(array(
+            'Furnizori' => $output_array,
+                )
+        ));
+
         return $response;
     }
 }

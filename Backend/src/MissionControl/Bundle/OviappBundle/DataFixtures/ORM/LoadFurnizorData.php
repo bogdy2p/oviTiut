@@ -25,14 +25,15 @@ class LoadFurnizorData extends AbstractFixture implements OrderedFixtureInterfac
         $creationDate->setTimezone(self::timezoneUTC());
 
         echo "Creare Furnizor Default !";
+        for ($i = 0; $i <= 3; $i++) {
+            $furnizor = new Furnizor();
 
-        $furnizor = new Furnizor();
+            $furnizor->setName('Furnizorul '.$i);
+            $furnizor->setAdress('AdresaFurnizor '.$i);
+            $furnizor->setPhone('071532423'.$i);
 
-        $furnizor->setName('NumeFurnizor1');
-        $furnizor->setAdress('AdresaFurnizor 1');
-        $furnizor->setPhone('071532423');
-
-        $manager->persist($furnizor);
+            $manager->persist($furnizor);
+        }
         $manager->flush();
     }
 
